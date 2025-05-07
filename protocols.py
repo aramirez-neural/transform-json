@@ -25,16 +25,25 @@ def translate_keys(data):
     return transformed_data
 
 def process_json(input_file, output_file):
-    with open(input_file, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    
+    try:
+        with open(input_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        print(f"Archivo cargado correctamente: {input_file}")
+    except (json.JSONDecodeError, FileNotFoundError) as e:
+        print(f"Error al leer el archivo JSON: {e}")
+        return
+
     if isinstance(data, list):
         transformed_data = [translate_keys(item) for item in data]
     else:
         transformed_data = translate_keys(data)
 
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(transformed_data, f, ensure_ascii=False, indent=4)
+    try:
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(transformed_data, f, ensure_ascii=False, indent=4)
+        print(f"Archivo transformado guardado en: {output_file}")
+    except Exception as e:
+        print(f"Error al guardar el archivo JSON: {e}")
 
 # Uso del script
 input_json_file = r'C:\Users\adrian.ramirez\Downloads\protocols.json'  # Ruta al archivo JSON de entrada
@@ -45,6 +54,5 @@ process_json(input_json_file, output_json_file)
 Uso:
 1. Modifica las rutas de entrada y salida de los archivos JSON en las variables 'input_json_file' y 'output_json_file'.
 2. Ejecuta el script desde la terminal o símbolo del sistema con el comando:
-   python index.py
-
+   python protocols.py
 """
